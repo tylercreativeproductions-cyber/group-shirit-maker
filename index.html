@@ -34,7 +34,16 @@
       margin-bottom: 25px;
     }
 
-    button {
+    .card {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 30px;
+      background-color: var(--tcp-white);
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    }
+
+    .btn {
       padding: 14px 24px;
       margin: 10px;
       font-size: 16px;
@@ -44,27 +53,55 @@
       border-radius: 12px;
       cursor: pointer;
       transition: 0.2s ease-in-out;
+      display: inline-block;
+      min-width: 180px;
     }
 
-    button:hover {
-      filter: brightness(0.92);
+    .btn:hover { filter: brightness(0.92); }
+
+    .secondary { background-color: var(--tcp-mocha); }
+
+    .hidden { display: none; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 18px;
     }
 
-    .secondary {
-      background-color: var(--tcp-mocha);
+    .tile {
+      border: 1px solid var(--tcp-sand);
+      border-radius: 14px;
+      padding: 14px;
+      text-align: left;
     }
 
-    .hidden {
-      display: none;
+    .tile h3 {
+      margin: 0 0 6px 0;
+      font-size: 18px;
     }
 
-    .card {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 30px;
-      background-color: var(--tcp-white);
-      border-radius: 16px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    .tile p {
+      margin: 0 0 10px 0;
+      font-size: 14px;
+      color: var(--tcp-mocha);
+    }
+
+    @media (max-width: 820px) {
+      .grid { grid-template-columns: 1fr; }
+      .btn { min-width: 220px; }
+      body { padding: 20px; }
+    }
+
+    .chip {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--tcp-tan);
+      color: var(--tcp-dark);
+      font-size: 13px;
+      margin-bottom: 12px;
     }
   </style>
 </head>
@@ -75,34 +112,91 @@
   <div id="homeScreen" class="card">
     <h1>Group Shirt Maker</h1>
     <p>Design your group shirt in under 2 minutes.</p>
-    <button onclick="showEventScreen()">Start New Design</button>
+    <button class="btn" onclick="showEventScreen()">Start New Design</button>
   </div>
 
   <!-- EVENT SCREEN -->
   <div id="eventScreen" class="card hidden">
     <h1>Choose Your Event</h1>
 
-    <button>Family Reunion</button>
-    <button>Girls Trip</button>
-    <button>Birthday Squad</button>
-    <button>Class Reunion</button>
-    <button>Wedding Party</button>
-    <button>Custom Shirt</button>
+    <button class="btn" onclick="chooseEvent('Family Reunion')">Family Reunion</button>
+    <button class="btn" onclick="chooseEvent('Girls Trip')">Girls Trip</button>
+    <button class="btn" onclick="chooseEvent('Birthday Squad')">Birthday Squad</button>
+    <button class="btn" onclick="chooseEvent('Class Reunion')">Class Reunion</button>
+    <button class="btn" onclick="chooseEvent('Wedding Party')">Wedding Party</button>
+    <button class="btn" onclick="chooseEvent('Custom Shirt')">Custom Shirt</button>
 
     <br><br>
 
-    <button class="secondary" onclick="goHome()">Back</button>
+    <button class="btn secondary" onclick="goHome()">Back</button>
+  </div>
+
+  <!-- TEMPLATE SCREEN -->
+  <div id="templateScreen" class="card hidden">
+    <div class="chip" id="selectedEventChip">Event: —</div>
+    <h1>Choose a Template</h1>
+    <p>Pick a layout style. You’ll customize text next.</p>
+
+    <div class="grid">
+      <div class="tile">
+        <h3>Big Bold Stack</h3>
+        <p>Best for simple, loud event shirts.</p>
+        <button class="btn" onclick="chooseTemplate('Big Bold Stack')">Select</button>
+      </div>
+
+      <div class="tile">
+        <h3>Circle Badge</h3>
+        <p>Classic reunion / trip badge look.</p>
+        <button class="btn" onclick="chooseTemplate('Circle Badge')">Select</button>
+      </div>
+
+      <div class="tile">
+        <h3>Minimal Line + Year</h3>
+        <p>Clean and modern. Great on any shirt.</p>
+        <button class="btn" onclick="chooseTemplate('Minimal Line + Year')">Select</button>
+      </div>
+    </div>
+
+    <br>
+    <button class="btn secondary" onclick="backToEvents()">Back</button>
   </div>
 
   <script>
+    let selectedEvent = "";
+    let selectedTemplate = "";
+
     function showEventScreen() {
-      document.getElementById("homeScreen").classList.add("hidden");
+      hideAll();
       document.getElementById("eventScreen").classList.remove("hidden");
     }
 
     function goHome() {
-      document.getElementById("eventScreen").classList.add("hidden");
+      hideAll();
       document.getElementById("homeScreen").classList.remove("hidden");
+    }
+
+    function chooseEvent(eventName) {
+      selectedEvent = eventName;
+      document.getElementById("selectedEventChip").textContent = "Event: " + selectedEvent;
+
+      hideAll();
+      document.getElementById("templateScreen").classList.remove("hidden");
+    }
+
+    function backToEvents() {
+      hideAll();
+      document.getElementById("eventScreen").classList.remove("hidden");
+    }
+
+    function chooseTemplate(templateName) {
+      selectedTemplate = templateName;
+      alert("Selected: " + selectedEvent + " → " + selectedTemplate + "\n\nNext: we will build the Customize screen.");
+    }
+
+    function hideAll() {
+      document.getElementById("homeScreen").classList.add("hidden");
+      document.getElementById("eventScreen").classList.add("hidden");
+      document.getElementById("templateScreen").classList.add("hidden");
     }
   </script>
 
