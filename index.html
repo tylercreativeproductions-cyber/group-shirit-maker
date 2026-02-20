@@ -6,6 +6,7 @@
 
   <style>
     :root{
+      /* TCP brand UI colors (app interface) */
       --tcp-accent: #de5935;
       --tcp-dark: #0a0a0a;
       --tcp-cream: #f8f7f2;
@@ -24,15 +25,8 @@
       color: var(--tcp-dark);
     }
 
-    h1 {
-      font-size: 34px;
-      margin-bottom: 10px;
-    }
-
-    p {
-      font-size: 18px;
-      margin-bottom: 25px;
-    }
+    h1 { font-size: 34px; margin-bottom: 10px; }
+    p  { font-size: 18px; margin-bottom: 25px; }
 
     .card {
       max-width: 900px;
@@ -58,9 +52,7 @@
     }
 
     .btn:hover { filter: brightness(0.92); }
-
     .secondary { background-color: var(--tcp-mocha); }
-
     .hidden { display: none; }
 
     .chip {
@@ -106,17 +98,13 @@
       border: 1px solid var(--tcp-sand);
       font-size: 16px;
       outline: none;
+      background: white;
+      color: var(--tcp-dark);
     }
 
     input:focus, select:focus {
       border-color: var(--tcp-accent);
       box-shadow: 0 0 0 3px rgba(222, 89, 53, 0.18);
-    }
-
-    .previewWrap {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
     }
 
     .previewBox {
@@ -128,6 +116,7 @@
       align-items: center;
       justify-content: center;
       text-align: center;
+      background: #ffffff;
     }
 
     .previewInner {
@@ -136,35 +125,17 @@
       word-break: break-word;
     }
 
-    .prevMain {
-      font-size: 42px;
-      font-weight: 900;
-      margin-bottom: 10px;
-    }
-
-    .prevSub {
-      font-size: 22px;
-      font-weight: 700;
-      opacity: 0.95;
-      margin-bottom: 8px;
-    }
-
-    .prevMeta {
-      font-size: 18px;
-      font-weight: 700;
-      opacity: 0.9;
-    }
+    .prevMain { font-size: 42px; font-weight: 900; margin-bottom: 10px; }
+    .prevSub  { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+    .prevMeta { font-size: 18px; font-weight: 700; opacity: 0.92; }
 
     .tinyNote {
       font-size: 13px;
       color: var(--tcp-mocha);
-      margin-top: 8px;
+      margin-top: 10px;
     }
 
-    .rowBtns {
-      text-align: center;
-      margin-top: 16px;
-    }
+    .rowBtns { text-align: center; margin-top: 16px; }
 
     @media (max-width: 900px) {
       body { padding: 20px; }
@@ -232,7 +203,7 @@
   <div id="customizeScreen" class="card hidden">
     <div class="chip" id="customizeChip">Event: — | Template: —</div>
     <h1>Customize Your Shirt</h1>
-    <p>Type your text and pick a style. Preview updates as you type.</p>
+    <p>Type your text and pick colors. Preview updates as you type.</p>
 
     <div class="grid">
       <!-- LEFT: CONTROLS -->
@@ -256,19 +227,47 @@
           <option value="classic">Classic Serif</option>
         </select>
 
-        <label for="palette">Color Palette</label>
-        <select id="palette" onchange="updatePreview()">
-          <option value="dark">Dark Shirt (light text)</option>
-          <option value="light">Light Shirt (dark text)</option>
-          <option value="tcp">TCP Pop (accent)</option>
+        <label for="mainColor">Main Text Color</label>
+        <select id="mainColor" onchange="updatePreview()">
+          <option value="#ffffff" style="color:#ffffff;">● White</option>
+          <option value="#0a0a0a" style="color:#0a0a0a;">● Black</option>
+          <option value="#f7cd46" style="color:#f7cd46;">● Gold</option>
+          <option value="#de5935" style="color:#de5935;">● Red</option>
+          <option value="#f8f7f2" style="color:#f8f7f2;">● Cream / Off-White</option>
+          <option value="#7fb8ff" style="color:#7fb8ff;">● Light Blue</option>
+          <option value="#ff4fa3" style="color:#ff4fa3;">● Pink</option>
+          <option value="#ff6a00" style="color:#ff6a00;">● Neon Orange</option>
+          <option value="#00a651" style="color:#00a651;">● Kelly Green</option>
+          <option value="#c0c0c0" style="color:#c0c0c0;">● Silver</option>
+          <option value="#800020" style="color:#800020;">● Burgundy</option>
+          <option value="#001f5b" style="color:#001f5b;">● Navy Blue</option>
+        </select>
+
+        <label for="subColor">Subtitle Color (Optional)</label>
+        <select id="subColor" onchange="updatePreview()">
+          <option value="none">● None (same as main)</option>
+          <option value="#ffffff" style="color:#ffffff;">● White</option>
+          <option value="#0a0a0a" style="color:#0a0a0a;">● Black</option>
+          <option value="#f7cd46" style="color:#f7cd46;">● Gold</option>
+          <option value="#de5935" style="color:#de5935;">● Red</option>
+          <option value="#f8f7f2" style="color:#f8f7f2;">● Cream / Off-White</option>
+          <option value="#7fb8ff" style="color:#7fb8ff;">● Light Blue</option>
+          <option value="#ff4fa3" style="color:#ff4fa3;">● Pink</option>
+          <option value="#ff6a00" style="color:#ff6a00;">● Neon Orange</option>
+          <option value="#00a651" style="color:#00a651;">● Kelly Green</option>
+          <option value="#c0c0c0" style="color:#c0c0c0;">● Silver</option>
+          <option value="#800020" style="color:#800020;">● Burgundy</option>
+          <option value="#001f5b" style="color:#001f5b;">● Navy Blue</option>
         </select>
 
         <div class="tinyNote">
-        Next step will export a Printify-ready file (PNG = Portable Network Graphics) with a transparent background. You’ll choose your shirt color inside Printify.        
+          Next step will export a Printify-ready file (PNG = Portable Network Graphics) with a transparent background.
+          You’ll choose your shirt color inside Printify.
+        </div>
       </div>
 
       <!-- RIGHT: PREVIEW -->
-      <div class="panel previewWrap">
+      <div class="panel">
         <div id="previewBox" class="previewBox">
           <div class="previewInner" id="previewInner">
             <div class="prevMain" id="prevMain">YOUR TEXT</div>
@@ -277,7 +276,7 @@
           </div>
         </div>
         <div class="tinyNote">
-          Preview is a “layout preview.” Print sizing/export comes next.
+          Preview may switch to a dark background when you pick light text colors (for visibility).
         </div>
       </div>
     </div>
@@ -323,24 +322,18 @@
     function chooseEvent(eventName) {
       selectedEvent = eventName;
       document.getElementById("selectedEventChip").textContent = "Event: " + selectedEvent;
-
       hideAll();
       document.getElementById("templateScreen").classList.remove("hidden");
     }
 
     function chooseTemplate(templateName) {
       selectedTemplate = templateName;
-
-      // Update chip on customize screen
       document.getElementById("customizeChip").textContent =
         "Event: " + selectedEvent + " | Template: " + selectedTemplate;
 
-      // Prefill suggestions based on event
       prefillDefaults();
-
       hideAll();
       document.getElementById("customizeScreen").classList.remove("hidden");
-
       updatePreview();
     }
 
@@ -355,7 +348,6 @@
       const year = document.getElementById("yearText");
       const loc  = document.getElementById("locText");
 
-      // Only prefill if empty (so we don't overwrite user typing if they return)
       if (!year.value) year.value = "2026";
 
       if (!main.value && selectedEvent === "Family Reunion") main.value = "SMITH FAMILY";
@@ -373,7 +365,6 @@
       if (!main.value && selectedEvent === "Text Only") main.value = "TEMPORARILY";
       if (!sub.value  && selectedEvent === "Text Only") sub.value  = "OUT OF ORDER";
 
-      // keep location empty by default
       if (!loc.value) loc.value = "";
     }
 
@@ -391,10 +382,9 @@
       else if (yearVal) meta = yearVal;
       else if (locVal) meta = locVal;
       else meta = "Year • Location";
-
       document.getElementById("prevMeta").textContent = meta;
 
-      // Font style (simple, controlled)
+      // Font styles (controlled)
       const fontStyle = document.getElementById("fontStyle").value;
       const prevMain = document.getElementById("prevMain");
       const prevSub = document.getElementById("prevSub");
@@ -417,26 +407,34 @@
         prevMain.style.letterSpacing = "0px";
       }
 
-      // Palette (preview only)
-      const pal = document.getElementById("palette").value;
-      const box = document.getElementById("previewBox");
-      const inner = document.getElementById("previewInner");
+      // Apply text colors
+      const mainColor = document.getElementById("mainColor").value;
+      const subColor = document.getElementById("subColor").value;
 
-      if (pal === "dark") {
-        box.style.backgroundColor = "#0a0a0a";
-        inner.style.color = "#ffffff";
-      } else if (pal === "light") {
-        box.style.backgroundColor = "#ffffff";
-        inner.style.color = "#0a0a0a";
-      } else { // tcp pop
-        box.style.backgroundColor = "#ffffff";
-        inner.style.color = "#0a0a0a";
-        prevSub.style.color = "var(--tcp-accent)";
+      prevMain.style.color = mainColor;
+      prevMeta.style.color = mainColor;
+
+      if (subColor === "none") {
+        prevSub.style.color = mainColor;
+      } else {
+        prevSub.style.color = subColor;
       }
 
-      // Ensure sub text color resets for non-tcp mode
-      if (pal !== "tcp") {
-        prevSub.style.color = "";
+      // Preview background logic (visibility helper)
+      // If main text is very light, switch preview box to dark so user can see it.
+      const box = document.getElementById("previewBox");
+      const isLightMain =
+        mainColor.toLowerCase() === "#ffffff" ||
+        mainColor.toLowerCase() === "#f8f7f2" ||
+        mainColor.toLowerCase() === "#c0c0c0" ||
+        mainColor.toLowerCase() === "#f7cd46";
+
+      if (isLightMain) {
+        box.style.backgroundColor = "#0a0a0a";
+        box.style.borderColor = "#8f7f66";
+      } else {
+        box.style.backgroundColor = "#ffffff";
+        box.style.borderColor = "#bfae93";
       }
     }
 
