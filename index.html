@@ -35,7 +35,7 @@
     }
 
     .card {
-      max-width: 760px;
+      max-width: 900px;
       margin: 0 auto;
       padding: 30px;
       background-color: var(--tcp-white);
@@ -76,9 +76,100 @@
       box-shadow: 0 3px 8px rgba(247, 205, 70, 0.35);
     }
 
-    @media (max-width: 820px) {
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 18px;
+      text-align: left;
+    }
+
+    .panel {
+      border: 1px solid var(--tcp-sand);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin: 12px 0 6px 0;
+      color: var(--tcp-dark);
+    }
+
+    input, select {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--tcp-sand);
+      font-size: 16px;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--tcp-accent);
+      box-shadow: 0 0 0 3px rgba(222, 89, 53, 0.18);
+    }
+
+    .previewWrap {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .previewBox {
+      border-radius: 16px;
+      padding: 26px;
+      border: 1px dashed var(--tcp-tan);
+      min-height: 230px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .previewInner {
+      max-width: 420px;
+      line-height: 1.05;
+      word-break: break-word;
+    }
+
+    .prevMain {
+      font-size: 42px;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .prevSub {
+      font-size: 22px;
+      font-weight: 700;
+      opacity: 0.95;
+      margin-bottom: 8px;
+    }
+
+    .prevMeta {
+      font-size: 18px;
+      font-weight: 700;
+      opacity: 0.9;
+    }
+
+    .tinyNote {
+      font-size: 13px;
+      color: var(--tcp-mocha);
+      margin-top: 8px;
+    }
+
+    .rowBtns {
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 900px) {
       body { padding: 20px; }
       .btn { min-width: 220px; }
+      .grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -137,6 +228,67 @@
     <button class="btn secondary" onclick="backToEvents()">Back</button>
   </div>
 
+  <!-- CUSTOMIZE SCREEN -->
+  <div id="customizeScreen" class="card hidden">
+    <div class="chip" id="customizeChip">Event: — | Template: —</div>
+    <h1>Customize Your Shirt</h1>
+    <p>Type your text and pick a style. Preview updates as you type.</p>
+
+    <div class="grid">
+      <!-- LEFT: CONTROLS -->
+      <div class="panel">
+        <label for="mainText">Main Text</label>
+        <input id="mainText" type="text" placeholder="e.g., SMITH FAMILY" oninput="updatePreview()">
+
+        <label for="subText">Subtitle</label>
+        <input id="subText" type="text" placeholder="e.g., REUNION" oninput="updatePreview()">
+
+        <label for="yearText">Year</label>
+        <input id="yearText" type="text" placeholder="e.g., 2026" oninput="updatePreview()">
+
+        <label for="locText">Location (optional)</label>
+        <input id="locText" type="text" placeholder="e.g., Atlanta, GA" oninput="updatePreview()">
+
+        <label for="fontStyle">Font Style</label>
+        <select id="fontStyle" onchange="updatePreview()">
+          <option value="bold">Bold & Clean</option>
+          <option value="modern">Modern Minimal</option>
+          <option value="classic">Classic Serif</option>
+        </select>
+
+        <label for="palette">Color Palette</label>
+        <select id="palette" onchange="updatePreview()">
+          <option value="dark">Dark Shirt (light text)</option>
+          <option value="light">Light Shirt (dark text)</option>
+          <option value="tcp">TCP Pop (accent)</option>
+        </select>
+
+        <div class="tinyNote">
+          Next step will export a Printify-ready file (PNG = Portable Network Graphics).
+        </div>
+      </div>
+
+      <!-- RIGHT: PREVIEW -->
+      <div class="panel previewWrap">
+        <div id="previewBox" class="previewBox">
+          <div class="previewInner" id="previewInner">
+            <div class="prevMain" id="prevMain">YOUR TEXT</div>
+            <div class="prevSub" id="prevSub">Subtitle</div>
+            <div class="prevMeta" id="prevMeta">Year • Location</div>
+          </div>
+        </div>
+        <div class="tinyNote">
+          Preview is a “layout preview.” Print sizing/export comes next.
+        </div>
+      </div>
+    </div>
+
+    <div class="rowBtns">
+      <button class="btn secondary" onclick="backToTemplates()">Back</button>
+      <button class="btn" onclick="goToExportStub()">Next</button>
+    </div>
+  </div>
+
   <script>
     let selectedEvent = "";
     let selectedTemplate = "";
@@ -146,6 +298,7 @@
       document.getElementById("eventScreen").classList.add("hidden");
       document.getElementById("moreOptionsScreen").classList.add("hidden");
       document.getElementById("templateScreen").classList.add("hidden");
+      document.getElementById("customizeScreen").classList.add("hidden");
     }
 
     function showEventScreen() {
@@ -178,9 +331,119 @@
 
     function chooseTemplate(templateName) {
       selectedTemplate = templateName;
+
+      // Update chip on customize screen
+      document.getElementById("customizeChip").textContent =
+        "Event: " + selectedEvent + " | Template: " + selectedTemplate;
+
+      // Prefill suggestions based on event
+      prefillDefaults();
+
+      hideAll();
+      document.getElementById("customizeScreen").classList.remove("hidden");
+
+      updatePreview();
+    }
+
+    function backToTemplates() {
+      hideAll();
+      document.getElementById("templateScreen").classList.remove("hidden");
+    }
+
+    function prefillDefaults() {
+      const main = document.getElementById("mainText");
+      const sub  = document.getElementById("subText");
+      const year = document.getElementById("yearText");
+      const loc  = document.getElementById("locText");
+
+      // Only prefill if empty (so we don't overwrite user typing if they return)
+      if (!year.value) year.value = "2026";
+
+      if (!main.value && selectedEvent === "Family Reunion") main.value = "SMITH FAMILY";
+      if (!sub.value  && selectedEvent === "Family Reunion") sub.value  = "REUNION";
+
+      if (!main.value && selectedEvent === "Girls Trip") main.value = "GIRLS TRIP";
+      if (!sub.value  && selectedEvent === "Girls Trip") sub.value  = "WEEKEND CREW";
+
+      if (!main.value && selectedEvent === "Birthday") main.value = "BIRTHDAY SQUAD";
+      if (!sub.value  && selectedEvent === "Birthday") sub.value  = "CELEBRATE";
+
+      if (!main.value && selectedEvent === "Baby Shower") main.value = "BABY SHOWER";
+      if (!sub.value  && selectedEvent === "Baby Shower") sub.value  = "SHOWER CREW";
+
+      if (!main.value && selectedEvent === "Text Only") main.value = "TEMPORARILY";
+      if (!sub.value  && selectedEvent === "Text Only") sub.value  = "OUT OF ORDER";
+
+      // keep location empty by default
+      if (!loc.value) loc.value = "";
+    }
+
+    function updatePreview() {
+      const mainVal = (document.getElementById("mainText").value || "YOUR TEXT").toUpperCase();
+      const subVal  = (document.getElementById("subText").value || "Subtitle").toUpperCase();
+      const yearVal = (document.getElementById("yearText").value || "").trim();
+      const locVal  = (document.getElementById("locText").value || "").trim();
+
+      document.getElementById("prevMain").textContent = mainVal;
+      document.getElementById("prevSub").textContent  = subVal;
+
+      let meta = "";
+      if (yearVal && locVal) meta = yearVal + " • " + locVal;
+      else if (yearVal) meta = yearVal;
+      else if (locVal) meta = locVal;
+      else meta = "Year • Location";
+
+      document.getElementById("prevMeta").textContent = meta;
+
+      // Font style (simple, controlled)
+      const fontStyle = document.getElementById("fontStyle").value;
+      const prevMain = document.getElementById("prevMain");
+      const prevSub = document.getElementById("prevSub");
+      const prevMeta = document.getElementById("prevMeta");
+
+      if (fontStyle === "bold") {
+        prevMain.style.fontFamily = "Arial, sans-serif";
+        prevSub.style.fontFamily  = "Arial, sans-serif";
+        prevMeta.style.fontFamily = "Arial, sans-serif";
+        prevMain.style.letterSpacing = "0.5px";
+      } else if (fontStyle === "modern") {
+        prevMain.style.fontFamily = "Trebuchet MS, Arial, sans-serif";
+        prevSub.style.fontFamily  = "Trebuchet MS, Arial, sans-serif";
+        prevMeta.style.fontFamily = "Trebuchet MS, Arial, sans-serif";
+        prevMain.style.letterSpacing = "1px";
+      } else { // classic
+        prevMain.style.fontFamily = "Georgia, serif";
+        prevSub.style.fontFamily  = "Georgia, serif";
+        prevMeta.style.fontFamily = "Georgia, serif";
+        prevMain.style.letterSpacing = "0px";
+      }
+
+      // Palette (preview only)
+      const pal = document.getElementById("palette").value;
+      const box = document.getElementById("previewBox");
+      const inner = document.getElementById("previewInner");
+
+      if (pal === "dark") {
+        box.style.backgroundColor = "#0a0a0a";
+        inner.style.color = "#ffffff";
+      } else if (pal === "light") {
+        box.style.backgroundColor = "#ffffff";
+        inner.style.color = "#0a0a0a";
+      } else { // tcp pop
+        box.style.backgroundColor = "#ffffff";
+        inner.style.color = "#0a0a0a";
+        prevSub.style.color = "var(--tcp-accent)";
+      }
+
+      // Ensure sub text color resets for non-tcp mode
+      if (pal !== "tcp") {
+        prevSub.style.color = "";
+      }
+    }
+
+    function goToExportStub() {
       alert(
-        "Selected: " + selectedEvent + " → " + selectedTemplate +
-        "\\n\\nNext: Customize screen coming next."
+        "Next step: Export screen.\n\nWe will generate a Printify-ready PNG (4500×5400) in the next step."
       );
     }
   </script>
