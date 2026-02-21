@@ -26,10 +26,10 @@
     }
 
     h1 { font-size: 34px; margin-bottom: 10px; }
-    p  { font-size: 18px; margin-bottom: 25px; }
+    p  { font-size: 18px; margin-bottom: 20px; }
 
     .card {
-      max-width: 900px;
+      max-width: 980px;
       margin: 0 auto;
       padding: 30px;
       background-color: var(--tcp-white);
@@ -68,18 +68,21 @@
       box-shadow: 0 3px 8px rgba(247, 205, 70, 0.35);
     }
 
-    .grid {
+    /* Two-column layout (Customize / Export) */
+    .twoCol {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 18px;
       margin-top: 18px;
       text-align: left;
+      align-items: start;
     }
 
     .panel {
       border: 1px solid var(--tcp-sand);
       border-radius: 14px;
       padding: 16px;
+      background: #fff;
     }
 
     label {
@@ -107,11 +110,12 @@
       box-shadow: 0 0 0 3px rgba(222, 89, 53, 0.18);
     }
 
+    /* Preview box (on Customize screen) */
     .previewBox {
       border-radius: 16px;
       padding: 26px;
       border: 1px dashed var(--tcp-tan);
-      min-height: 230px;
+      min-height: 280px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -120,12 +124,12 @@
     }
 
     .previewInner {
-      max-width: 420px;
+      max-width: 440px;
       line-height: 1.05;
       word-break: break-word;
     }
 
-    .prevMain { font-size: 42px; font-weight: 900; margin-bottom: 10px; }
+    .prevMain { font-size: 46px; font-weight: 900; margin-bottom: 10px; }
     .prevSub  { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
     .prevMeta { font-size: 18px; font-weight: 700; opacity: 0.92; }
 
@@ -133,28 +137,64 @@
       font-size: 13px;
       color: var(--tcp-mocha);
       margin-top: 10px;
+      line-height: 1.25;
     }
 
-    .rowBtns { text-align: center; margin-top: 16px; }
+    .footerBtns {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    /* Export preview (shows checkerboard for transparency) */
+    .checker {
+      background:
+        linear-gradient(45deg, #e9e9e9 25%, transparent 25%),
+        linear-gradient(-45deg, #e9e9e9 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #e9e9e9 75%),
+        linear-gradient(-45deg, transparent 75%, #e9e9e9 75%);
+      background-size: 24px 24px;
+      background-position: 0 0, 0 12px, 12px -12px, -12px 0px;
+      border-radius: 16px;
+      border: 1px solid var(--tcp-sand);
+      padding: 14px;
+    }
+
+    canvas {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      display: block;
+    }
+
+    .steps {
+      margin: 8px 0 0 18px;
+      padding: 0;
+      color: var(--tcp-dark);
+      line-height: 1.4;
+    }
 
     @media (max-width: 900px) {
       body { padding: 20px; }
       .btn { min-width: 220px; }
-      .grid { grid-template-columns: 1fr; }
+      .twoCol { grid-template-columns: 1fr; }
+      .previewBox { min-height: 240px; }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- HOME SCREEN -->
+  <!-- HOME -->
   <div id="homeScreen" class="card">
     <h1>Group Shirt Maker</h1>
     <p>Design your group shirt in under 2 minutes.</p>
     <button class="btn" onclick="showEventScreen()">Start New Design</button>
   </div>
 
-  <!-- EVENT SCREEN -->
+  <!-- EVENTS -->
   <div id="eventScreen" class="card hidden">
     <h1>Choose Your Event</h1>
 
@@ -169,7 +209,7 @@
     <button class="btn secondary" onclick="goHome()">Back</button>
   </div>
 
-  <!-- MORE OPTIONS SCREEN -->
+  <!-- MORE OPTIONS -->
   <div id="moreOptionsScreen" class="card hidden">
     <h1>More Options</h1>
     <p>Choose an occasion (or select Custom Shirt).</p>
@@ -185,7 +225,7 @@
     <button class="btn secondary" onclick="backToEvents()">Back</button>
   </div>
 
-  <!-- TEMPLATE SCREEN -->
+  <!-- TEMPLATES -->
   <div id="templateScreen" class="card hidden">
     <div class="chip" id="selectedEventChip">Event: —</div>
     <h1>Choose a Template</h1>
@@ -199,14 +239,14 @@
     <button class="btn secondary" onclick="backToEvents()">Back</button>
   </div>
 
-  <!-- CUSTOMIZE SCREEN -->
+  <!-- CUSTOMIZE -->
   <div id="customizeScreen" class="card hidden">
     <div class="chip" id="customizeChip">Event: — | Template: —</div>
     <h1>Customize Your Shirt</h1>
     <p>Type your text and pick colors. Preview updates as you type.</p>
 
-    <div class="grid">
-      <!-- LEFT: CONTROLS -->
+    <div class="twoCol">
+      <!-- Controls -->
       <div class="panel">
         <label for="mainText">Main Text</label>
         <input id="mainText" type="text" placeholder="e.g., SMITH FAMILY" oninput="updatePreview()">
@@ -228,7 +268,7 @@
         </select>
 
         <label for="mainColor">Main Text Color</label>
-       <select id="mainColor" onchange="updatePreview()">
+        <select id="mainColor" onchange="updatePreview()">
           <option value="#ffffff">⚪ White</option>
           <option value="#0a0a0a">⚫ Black</option>
           <option value="#f7cd46">🟡 Gold</option>
@@ -242,11 +282,11 @@
           <option value="#c0c0c0">⚪ Silver</option>
           <option value="#800020">🟣 Burgundy</option>
           <option value="#000080">🔵 Navy Blue</option>
-      </select>
+        </select>
 
         <label for="subColor">Subtitle Color (Optional)</label>
         <select id="subColor" onchange="updatePreview()">
-          <option value="none"> None</option>
+          <option value="none">⊘ None</option>
           <option value="#ffffff">⚪ White</option>
           <option value="#0a0a0a">⚫ Black</option>
           <option value="#f7cd46">🟡 Gold</option>
@@ -268,10 +308,10 @@
         </div>
       </div>
 
-      <!-- RIGHT: PREVIEW -->
+      <!-- Preview -->
       <div class="panel">
         <div id="previewBox" class="previewBox">
-          <div class="previewInner" id="previewInner">
+          <div class="previewInner">
             <div class="prevMain" id="prevMain">YOUR TEXT</div>
             <div class="prevSub" id="prevSub">Subtitle</div>
             <div class="prevMeta" id="prevMeta">Year • Location</div>
@@ -283,9 +323,49 @@
       </div>
     </div>
 
-    <div class="rowBtns">
+    <div class="footerBtns">
       <button class="btn secondary" onclick="backToTemplates()">Back</button>
-      <button class="btn" onclick="goToExportStub()">Next</button>
+      <button class="btn" onclick="goToExport()">Next</button>
+    </div>
+  </div>
+
+  <!-- EXPORT -->
+  <div id="exportScreen" class="card hidden">
+    <div class="chip" id="exportChip">Export: —</div>
+    <h1>Export Your Design</h1>
+    <p>Download a transparent PNG, ready to upload to Printify.</p>
+
+    <div class="twoCol">
+      <!-- Instructions -->
+      <div class="panel">
+        <h3 style="margin-top:0;">How to use this file</h3>
+        <ul class="steps">
+          <li>Click <b>Download PNG</b>.</li>
+          <li>In Printify, choose a product (T-shirt, hoodie, etc.).</li>
+          <li>Upload your PNG file (it has a transparent background).</li>
+          <li>Select your shirt color inside Printify.</li>
+        </ul>
+
+        <div class="tinyNote">
+          Export size: <b>4500 × 5400 px</b> (good for most shirt prints).<br>
+          Background: <b>Transparent</b> (so Printify can place it on any color).
+        </div>
+
+        <div class="footerBtns" style="justify-content:flex-start;">
+          <button class="btn secondary" onclick="backToCustomize()">Back</button>
+          <button class="btn" onclick="downloadPNG()">Download PNG</button>
+        </div>
+      </div>
+
+      <!-- Canvas preview -->
+      <div class="panel">
+        <div class="checker">
+          <canvas id="exportCanvas" width="4500" height="5400"></canvas>
+        </div>
+        <div class="tinyNote">
+          Checkerboard = transparency. Your downloaded PNG will be transparent.
+        </div>
+      </div>
     </div>
   </div>
 
@@ -299,6 +379,7 @@
       document.getElementById("moreOptionsScreen").classList.add("hidden");
       document.getElementById("templateScreen").classList.add("hidden");
       document.getElementById("customizeScreen").classList.add("hidden");
+      document.getElementById("exportScreen").classList.add("hidden");
     }
 
     function showEventScreen() {
@@ -344,6 +425,11 @@
       document.getElementById("templateScreen").classList.remove("hidden");
     }
 
+    function backToCustomize() {
+      hideAll();
+      document.getElementById("customizeScreen").classList.remove("hidden");
+    }
+
     function prefillDefaults() {
       const main = document.getElementById("mainText");
       const sub  = document.getElementById("subText");
@@ -386,7 +472,7 @@
       else meta = "Year • Location";
       document.getElementById("prevMeta").textContent = meta;
 
-      // Font styles (controlled)
+      // Fonts (simple built-ins)
       const fontStyle = document.getElementById("fontStyle").value;
       const prevMain = document.getElementById("prevMain");
       const prevSub = document.getElementById("prevSub");
@@ -402,34 +488,28 @@
         prevSub.style.fontFamily  = "Trebuchet MS, Arial, sans-serif";
         prevMeta.style.fontFamily = "Trebuchet MS, Arial, sans-serif";
         prevMain.style.letterSpacing = "1px";
-      } else { // classic
+      } else {
         prevMain.style.fontFamily = "Georgia, serif";
         prevSub.style.fontFamily  = "Georgia, serif";
         prevMeta.style.fontFamily = "Georgia, serif";
         prevMain.style.letterSpacing = "0px";
       }
 
-      // Apply text colors
-      const mainColor = document.getElementById("mainColor").value;
-      const subColor = document.getElementById("subColor").value;
+      // Colors
+      const mainColor = document.getElementById("mainColor").value.toLowerCase();
+      const subColor  = document.getElementById("subColor").value.toLowerCase();
 
       prevMain.style.color = mainColor;
       prevMeta.style.color = mainColor;
+      prevSub.style.color  = (subColor === "none") ? mainColor : subColor;
 
-      if (subColor === "none") {
-        prevSub.style.color = mainColor;
-      } else {
-        prevSub.style.color = subColor;
-      }
-
-      // Preview background logic (visibility helper)
-      // If main text is very light, switch preview box to dark so user can see it.
+      // Preview background visibility helper
       const box = document.getElementById("previewBox");
       const isLightMain =
-        mainColor.toLowerCase() === "#ffffff" ||
-        mainColor.toLowerCase() === "#f8f7f2" ||
-        mainColor.toLowerCase() === "#c0c0c0" ||
-        mainColor.toLowerCase() === "#f7cd46";
+        mainColor === "#ffffff" ||
+        mainColor === "#f8f7f2" ||
+        mainColor === "#c0c0c0" ||
+        mainColor === "#f7cd46";
 
       if (isLightMain) {
         box.style.backgroundColor = "#0a0a0a";
@@ -440,10 +520,173 @@
       }
     }
 
-    function goToExportStub() {
-      alert(
-        "Next step: Export screen.\n\nWe will generate a Printify-ready PNG (4500×5400) in the next step."
-      );
+    // -------- EXPORT ENGINE --------
+
+    function goToExport() {
+      hideAll();
+      document.getElementById("exportScreen").classList.remove("hidden");
+
+      const mainVal = (document.getElementById("mainText").value || "YOUR TEXT").toUpperCase();
+      const subVal  = (document.getElementById("subText").value || "").toUpperCase();
+      const yearVal = (document.getElementById("yearText").value || "").trim();
+      const locVal  = (document.getElementById("locText").value || "").trim();
+
+      const chip = document.getElementById("exportChip");
+      chip.textContent = "Export: " + selectedEvent + " | " + selectedTemplate;
+
+      // Draw export canvas
+      renderExportCanvas({
+        mainText: mainVal,
+        subText: subVal,
+        yearText: yearVal,
+        locText: locVal,
+        fontStyle: document.getElementById("fontStyle").value,
+        mainColor: document.getElementById("mainColor").value,
+        subColor: document.getElementById("subColor").value
+      });
+    }
+
+    function renderExportCanvas(data) {
+      const canvas = document.getElementById("exportCanvas");
+      const ctx = canvas.getContext("2d");
+
+      // Clear to transparent
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Choose fonts
+      let fontMain = "900 360px Arial";
+      let fontSub  = "800 180px Arial";
+      let fontMeta = "700 150px Arial";
+
+      if (data.fontStyle === "modern") {
+        fontMain = "900 340px 'Trebuchet MS', Arial";
+        fontSub  = "800 170px 'Trebuchet MS', Arial";
+        fontMeta = "700 140px 'Trebuchet MS', Arial";
+      } else if (data.fontStyle === "classic") {
+        fontMain = "900 340px Georgia";
+        fontSub  = "800 170px Georgia";
+        fontMeta = "700 140px Georgia";
+      }
+
+      // Build meta line
+      let meta = "";
+      if (data.yearText && data.locText) meta = data.yearText + " • " + data.locText;
+      else if (data.yearText) meta = data.yearText;
+      else if (data.locText) meta = data.locText;
+
+      // Colors
+      const mainColor = data.mainColor;
+      const subColor  = (data.subColor === "none") ? data.mainColor : data.subColor;
+
+      // Template-based layout
+      // (Simple MVP layouts; we can make richer later.)
+      if (selectedTemplate === "Circle Badge") {
+        // Draw a simple circular badge stroke (transparent background still)
+        const cx = 2250, cy = 2200;
+        const r = 1300;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.lineWidth = 40;
+        ctx.strokeStyle = mainColor;
+        ctx.globalAlpha = 0.55;
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+
+        // Text inside badge
+        drawCenteredLines(ctx, data.mainText, fontMain, mainColor, 2250, 1900, 420);
+        if (data.subText) drawCenteredLine(ctx, data.subText, fontSub, subColor, 2250, 2700);
+        if (meta) drawCenteredLine(ctx, meta, fontMeta, mainColor, 2250, 3050);
+
+      } else if (selectedTemplate === "Minimal Line + Year") {
+        // Minimal style: main text, thin line, year + location
+        drawCenteredLine(ctx, data.mainText, fontMain, mainColor, 2250, 2200);
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.strokeStyle = subColor;
+        ctx.lineWidth = 24;
+        ctx.globalAlpha = 0.9;
+        ctx.moveTo(1100, 2650);
+        ctx.lineTo(3400, 2650);
+        ctx.stroke();
+        ctx.restore();
+
+        if (data.subText) drawCenteredLine(ctx, data.subText, fontSub, subColor, 2250, 2950);
+        if (meta) drawCenteredLine(ctx, meta, fontMeta, mainColor, 2250, 3300);
+
+      } else {
+        // Big Bold Stack (default)
+        drawCenteredLines(ctx, data.mainText, fontMain, mainColor, 2250, 2150, 420);
+        if (data.subText) drawCenteredLine(ctx, data.subText, fontSub, subColor, 2250, 3050);
+        if (meta) drawCenteredLine(ctx, meta, fontMeta, mainColor, 2250, 3400);
+      }
+    }
+
+    function drawCenteredLine(ctx, text, font, color, x, y) {
+      ctx.save();
+      ctx.font = font;
+      ctx.fillStyle = color;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, x, y);
+      ctx.restore();
+    }
+
+    // Splits long main text into up to 2 lines (simple but effective)
+    function drawCenteredLines(ctx, text, font, color, x, y, maxWidth) {
+      ctx.save();
+      ctx.font = font;
+      ctx.fillStyle = color;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      const words = text.split(" ");
+      if (words.length <= 1) {
+        ctx.fillText(text, x, y);
+        ctx.restore();
+        return;
+      }
+
+      // Try best split into 2 lines
+      let bestA = "", bestB = "", bestDiff = Infinity;
+
+      for (let i = 1; i < words.length; i++) {
+        const a = words.slice(0, i).join(" ");
+        const b = words.slice(i).join(" ");
+        const wa = ctx.measureText(a).width;
+        const wb = ctx.measureText(b).width;
+
+        if (wa <= 3200 && wb <= 3200) {
+          const diff = Math.abs(wa - wb);
+          if (diff < bestDiff) {
+            bestDiff = diff;
+            bestA = a; bestB = b;
+          }
+        }
+      }
+
+      if (!bestA) {
+        // fallback: just draw one line
+        ctx.fillText(text, x, y);
+        ctx.restore();
+        return;
+      }
+
+      ctx.fillText(bestA, x, y - 220);
+      ctx.fillText(bestB, x, y + 220);
+      ctx.restore();
+    }
+
+    function downloadPNG() {
+      const canvas = document.getElementById("exportCanvas");
+      const link = document.createElement("a");
+      const safeEvent = (selectedEvent || "design").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+      const safeTemplate = (selectedTemplate || "template").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+      link.download = safeEvent + "-" + safeTemplate + ".png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
     }
   </script>
 
