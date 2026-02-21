@@ -302,6 +302,103 @@
           <option value="#000080">🔵 Navy Blue</option>
         </select>
 
+        <div style="margin-top:12px;">
+  <label style="display:block;font-size:14px;font-weight:700;margin:12px 0 6px;">Main Text Color (Swatch Demo)</label>
+
+  <div class="swatchSelect" id="swatchDemo">
+    <button type="button" class="swatchBtn" onclick="toggleSwatchMenu('swatchDemoMenu')">
+      <span class="dot" style="background:#000080;"></span>
+      <span class="swatchLabel" id="swatchDemoLabel">Navy Blue</span>
+      <span class="caret">▾</span>
+    </button>
+
+    <div class="swatchMenu hidden" id="swatchDemoMenu">
+      <div class="swatchItem" onclick="pickSwatch('swatchDemoLabel','#000080','Navy Blue','swatchDemoMenu')">
+        <span class="dot" style="background:#000080;"></span> Navy Blue
+      </div>
+      <div class="swatchItem" onclick="pickSwatch('swatchDemoLabel','#7fb8ff','Light Blue','swatchDemoMenu')">
+        <span class="dot" style="background:#7fb8ff;"></span> Light Blue
+      </div>
+      <div class="swatchItem" onclick="pickSwatch('swatchDemoLabel','#F4C2C2','Baby Girl Pink','swatchDemoMenu')">
+        <span class="dot" style="background:#F4C2C2;"></span> Baby Girl Pink
+      </div>
+      <div class="swatchItem" onclick="pickSwatch('swatchDemoLabel','#f7cd46','Gold','swatchDemoMenu')">
+        <span class="dot" style="background:#f7cd46;"></span> Gold
+      </div>
+      <div class="swatchItem" onclick="pickSwatch('swatchDemoLabel','#0a0a0a','Black','swatchDemoMenu')">
+        <span class="dot" style="background:#0a0a0a;"></span> Black
+      </div>
+      <div class="swatchItem" onclick="pickSwatch('swatchDemoLabel','#ffffff','White','swatchDemoMenu')">
+        <span class="dot" style="background:#ffffff;border:1px solid #d9c5a7;"></span> White
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Swatch dropdown styling (matches your app vibe) */
+  .swatchSelect { position: relative; width: 100%; }
+  .swatchBtn{
+    width: 100%;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid #d9c5a7;
+    background:#fff;
+    cursor:pointer;
+    font-size:16px;
+    color:#0a0a0a;
+  }
+  .dot{
+    width:14px; height:14px; border-radius:999px; flex:0 0 14px;
+  }
+  .swatchLabel{ flex:1; text-align:left; }
+  .caret{ opacity:0.7; }
+  .swatchMenu{
+    position:absolute;
+    top:calc(100% + 6px);
+    left:0;
+    right:0;
+    border:1px solid #d9c5a7;
+    border-radius:10px;
+    background:#fff;
+    box-shadow:0 10px 24px rgba(0,0,0,0.10);
+    padding:6px;
+    z-index:9999;
+  }
+  .swatchItem{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 10px;
+    border-radius:8px;
+    cursor:pointer;
+    color:#0a0a0a;
+    font-size:15px;
+  }
+  .swatchItem:hover{ background:#f8f7f2; }
+  .hidden{ display:none; }
+</style>
+
+<script>
+  function toggleSwatchMenu(menuId){
+    document.getElementById(menuId).classList.toggle('hidden');
+  }
+  function pickSwatch(labelId, hex, name, menuId){
+    const label = document.getElementById(labelId);
+    label.textContent = name;
+
+    // update the dot in the button (the first .dot inside the button)
+    const btn = label.closest('.swatchBtn') || label.parentElement;
+    const dot = btn.querySelector('.dot');
+    dot.style.background = hex;
+
+    document.getElementById(menuId).classList.add('hidden');
+  }
+</script>
+
         <div class="tinyNote">
           Next step will export a Printify-ready file (PNG = Portable Network Graphics) with a transparent background.
           You’ll choose your shirt color inside Printify.
