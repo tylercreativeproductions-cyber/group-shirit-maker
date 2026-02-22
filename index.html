@@ -586,7 +586,7 @@
 
     function updatePreview() {
       const mainVal = (document.getElementById("mainText").value || "YOUR TEXT").toUpperCase();
-      const subVal  = (document.getElementById("subText").value || "Subtitle").toUpperCase();
+      const subVal = (document.getElementById("subText").value || "").toUpperCase();
       const yearVal = (document.getElementById("yearText").value || "").trim();
       const locVal  = (document.getElementById("locText").value || "").trim();
 
@@ -597,8 +597,11 @@
       if (yearVal && locVal) meta = yearVal + " • " + locVal;
       else if (yearVal) meta = yearVal;
       else if (locVal) meta = locVal;
-      else meta = "Year • Location";
-      document.getElementById("prevMeta").textContent = meta;
+     const metaEl = document.getElementById("prevMeta");
+      metaEl.textContent = meta;
+
+      // Hide meta line if empty
+      metaEl.style.display = meta.trim() ? "block" : "none";
 
       // Fonts (simple built-ins)
       const fontStyle = document.getElementById("fontStyle").value;
