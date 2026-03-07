@@ -586,7 +586,7 @@
 
      function updatePreview() {
    // --- Grab input values (NO placeholder defaults) ---
-      const titleVal = (document.getElementById("titleText")?.value || "").trim();
+      const mainVal = (document.getElementById("mainText")?.value || "").trim().toUpperCase();
       const subVal = (document.getElementById("subText")?.value || "").trim().toUpperCase();
       const yearVal = (document.getElementById("yearText")?.value || "").trim();
       const locVal  = (document.getElementById("locText")?.value  || "").trim();
